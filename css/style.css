@@ -1,0 +1,27 @@
+/* Genel Stil Düzenlemeleri */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #00d4ff !important; /* İsmini mavi tonlarında yapalım */
+}
+
+/* Sayfalar arası geçişte yumuşaklık */
+.nav-link {
+    transition: color 0.3s;
+}
+.rounded-circle {
+    border: 5px solid #fff;
+}
+
+h2 {
+    color: #333;
+}
+
+.list-group-item {
+    background-color: transparent;
+    padding-left: 0;
+}
