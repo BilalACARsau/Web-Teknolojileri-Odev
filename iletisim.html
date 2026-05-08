@@ -43,23 +43,23 @@
                         
                         <div class="mb-3">
                             <label for="fullName" class="form-label fw-semibold">Adınız Soyadınız</label>
-                            <input type="text" name="ad_soyad" class="form-control" id="fullName" placeholder="Bilal Acar">
+                            <input type="text" name="ad_soyad" class="form-control" id="fullName" placeholder="Bilal Acar" v-model="ad_soyad">
                         </div>
 
                         <div class="mb-3">
                             <label for="email" class="form-label fw-semibold">E-posta Adresiniz</label>
-                            <input type="text" name="email" class="form-control" id="email" placeholder="b2412100001@sakarya.edu.tr">
+                            <input type="text" name="email" class="form-control" id="email" placeholder="b2412100001@sakarya.edu.tr" v-model="email">
                         </div>
 
                         <div class="mb-3">
                             <label for="phone" class="form-label fw-semibold">Telefon Numaranız</label>
-                            <input type="text" name="telefon" class="form-control" id="phone" placeholder="5XXXXXXXXX" maxlength="10">
+                            <input type="text" name="telefon" class="form-control" id="phone" placeholder="5XXXXXXXXX" maxlength="10" v-model="telefon">
                             <div class="form-text">Başında 0 olmadan 10 haneli giriniz.</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="subject" class="form-label fw-semibold">Konu</label>
-                            <select name="konu" class="form-select" id="subject">
+                            <select name="konu" class="form-select" id="subject" v-model="konu">
                                 <option value="">Seçiniz...</option>
                                 <option value="Web Projesi">Web Projesi</option>
                                 <option value="Gömülü Sistemler">Gömülü Sistemler</option>
@@ -70,34 +70,39 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold d-block">Cinsiyet</label>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="cinsiyet" id="male" value="Erkek">
+                                <input class="form-check-input" type="radio" name="cinsiyet" id="male" value="Erkek" v-model="cinsiyet">
                                 <label class="form-check-label" for="male">Erkek</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="cinsiyet" id="female" value="Kadın">
+                                <input class="form-check-input" type="radio" name="cinsiyet" id="female" value="Kadın" v-model="cinsiyet">
                                 <label class="form-check-label" for="female">Kadın</label>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="message" class="form-label fw-semibold">Mesajınız</label>
-                            <textarea name="mesaj" class="form-control" id="message" rows="4" placeholder="Mesajınızı detaylandırın..."></textarea>
+                            <textarea name="mesaj" class="form-control" id="message" rows="4" placeholder="Mesajınızı detaylandırın..." v-model="mesaj"></textarea>
                         </div>
 
                         <div class="mb-4 form-check">
-                            <input type="checkbox" name="onay" class="form-check-input" id="kvkk">
+                            <input type="checkbox" name="onay" class="form-check-input" id="kvkk" v-model="onay">
                             <label class="form-check-label small" for="kvkk">Bilgilerimin doğruluğunu ve gönderilmesini onaylıyorum.</label>
                         </div>
 
                         <div class="row g-2">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <button type="button" class="btn btn-primary w-100 py-2" onclick="validateNative()">
-                                    <i class="fa-solid fa-code me-2"></i>Native JS ile Gönder
+                                    <i class="fa-solid fa-code me-2"></i>Native JS Gönder
                                 </button>
                             </div>
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-success w-100 py-2" id="vueSubmit">
-                                    <i class="fa-brands fa-vuejs me-2"></i>Vue.js ile Gönder
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-success w-100 py-2" @click="validateVue">
+                                    <i class="fa-brands fa-vuejs me-2"></i>Vue.js Gönder
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="reset" class="btn btn-danger w-100 py-2" @click="resetForm">
+                                    <i class="fa-solid fa-trash-can me-2"></i>Temizle
                                 </button>
                             </div>
                         </div>
@@ -111,7 +116,11 @@
         <p class="mb-0">&copy; 2026 Bilal Acar - Tüm Hakları Saklıdır.</p>
     </footer>
 
+    <!-- Vue.js Kütüphanesi -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <script>
+    // --- 1. NATIVE JAVASCRIPT VALIDATION ---
     function validateNative() {
         const adSoyad = document.getElementById('fullName').value.trim();
         const email = document.getElementById('email').value.trim();
@@ -121,38 +130,83 @@
         const cinsiyet = document.querySelector('input[name="cinsiyet"]:checked');
         const kvkk = document.getElementById('kvkk').checked;
 
-        // Regex Tanımları
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^[0-9]+$/; // Ödev: Sadece rakam kontrolü
+        const phoneRegex = /^[0-9]+$/;
 
-        // 1. Boş Alan Kontrolleri
         if (!adSoyad || !email || !telefon || !konu || !mesaj || !cinsiyet) {
-            alert("Lütfen tüm alanları doldurunuz!");
+            alert("Native JS Uyarısı: Lütfen tüm alanları doldurunuz!");
             return false;
         }
-
-        // 2. Email Format Kontrolü
         if (!emailRegex.test(email)) {
-            alert("Geçersiz e-posta formatı!");
+            alert("Native JS Uyarısı: Geçersiz e-posta formatı!");
             return false;
         }
-
-        // 3. Telefon Rakam Kontrolü
         if (!phoneRegex.test(telefon) || telefon.length !== 10) {
-            alert("Telefon numarası sadece rakamlardan oluşmalı ve 10 hane olmalıdır!");
+            alert("Native JS Uyarısı: Telefon numarası sadece rakamlardan oluşmalı ve 10 hane olmalıdır!");
             return false;
         }
-
-        // 4. KVKK Kontrolü
         if (!kvkk) {
-            alert("Lütfen onay kutusunu işaretleyiniz!");
+            alert("Native JS Uyarısı: Lütfen onay kutusunu işaretleyiniz!");
             return false;
         }
 
-        // Başarılı ise formu gönder
         alert("Native JS Kontrolü Başarılı! Veriler PHP sayfasına gönderiliyor...");
         document.getElementById('contactForm').submit();
     }
+
+    // --- 2. VUE.JS VALIDATION ---
+    const { createApp } = Vue;
+
+    createApp({
+        data() {
+            return {
+                ad_soyad: '',
+                email: '',
+                telefon: '',
+                konu: '',
+                cinsiyet: '',
+                mesaj: '',
+                onay: false
+            }
+        },
+        methods: {
+            validateVue() {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const phoneRegex = /^[0-9]+$/;
+
+                if (!this.ad_soyad || !this.email || !this.telefon || !this.konu || !this.mesaj || !this.cinsiyet) {
+                    alert("Vue.js Uyarısı: Lütfen tüm alanları doldurunuz!");
+                    return;
+                }
+                if (!emailRegex.test(this.email)) {
+                    alert("Vue.js Uyarısı: E-posta formatı hatalı!");
+                    return;
+                }
+                if (!phoneRegex.test(this.telefon) || this.telefon.length !== 10) {
+                    alert("Vue.js Uyarısı: Telefon numarası sadece rakam (10 hane) olmalıdır!");
+                    return;
+                }
+                if (!this.onay) {
+                    alert("Vue.js Uyarısı: Lütfen onay kutusunu işaretleyiniz!");
+                    return;
+                }
+
+                alert("Vue.js Kontrolü Başarılı! Form PHP sayfasına iletiliyor...");
+                document.getElementById('contactForm').submit();
+            },
+            resetForm() {
+                // Vue data özelliklerini sıfırla (v-model sayesinde inputlar temizlenir)
+                this.ad_soyad = '';
+                this.email = '';
+                this.telefon = '';
+                this.konu = '';
+                this.cinsiyet = '';
+                this.mesaj = '';
+                this.onay = false;
+                alert("Form başarıyla temizlendi.");
+            }
+        }
+    }).mount('#contactForm');
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
